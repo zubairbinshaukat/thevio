@@ -50,3 +50,6 @@ test-results/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local agent rules (never commit)
+CLAUDE.local.md

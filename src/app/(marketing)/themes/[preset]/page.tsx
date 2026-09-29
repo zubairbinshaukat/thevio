@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PageShell } from "@/components/page-shell";
 
 // Presets are a fixed set; unknown slugs 404. Phase 2 swaps this for the real
 // list from core/theme. Cache Components needs at least one entry to build.
@@ -16,8 +17,8 @@ export default async function PresetPage(props: PageProps<"/themes/[preset]">) {
   const { preset } = await props.params;
   if (!isPreset(preset)) notFound();
   return (
-    <main>
-      <h1>{preset}</h1>
-    </main>
+    <PageShell eyebrow="Preset" title={preset}>
+      <p>Preset pages arrive with the curated preset list.</p>
+    </PageShell>
   );
 }

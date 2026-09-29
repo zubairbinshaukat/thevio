@@ -36,7 +36,7 @@
           "level": "warn",
           "fix": "safe",
           "options": {
-            "functions": ["cn", "cva"]
+            "functions": ["cn", "cva", "cx"]
           }
         }
       }

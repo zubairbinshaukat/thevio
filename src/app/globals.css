@@ -4,9 +4,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Thevio's own chrome. Tokens and rationale: DESIGN.md §3.
+ * `--hue` tints every neutral, shadow and glow; the landing's theme picker
+ * rewrites it (and `--brand`) on <html>, so the whole page follows the theme
+ * being previewed while the chrome itself stays neutral.
+ */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-sunken: var(--sunken);
+  --color-edge: var(--edge);
+  --color-brand: var(--brand);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-heading: var(--font-sans);
@@ -39,40 +52,146 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Radii nest: inner = outer − padding (32 ⊃ 24 ⊃ 16 ⊃ 12 ⊃ 8). */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.5rem;
+
+  /*
+   * Soft shadow scale: 2–3 layers, straight down, tinted with --hue, never
+   * black. Inline, so var(--hue) resolves on each element and a subtree can
+   * re-tint its own shadows. Dark mode deepens the tint (--shadow-k).
+   */
+  --shadow-xs:
+    0 1px 2px 0
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.06 * var(--shadow-k))
+    ),
+    0 1px 1px 0
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.04 * var(--shadow-k))
+    );
+  --shadow-sm:
+    0 1px 2px 0
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.05 * var(--shadow-k))
+    ),
+    0 2px 6px -1px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.06 * var(--shadow-k))
+    );
+  --shadow-md:
+    0 2px 4px -1px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.05 * var(--shadow-k))
+    ),
+    0 8px 16px -4px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.07 * var(--shadow-k))
+    );
+  --shadow-lg:
+    0 2px 4px -1px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.04 * var(--shadow-k))
+    ),
+    0 12px 24px -6px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.07 * var(--shadow-k))
+    ),
+    0 24px 40px -12px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.06 * var(--shadow-k))
+    );
+  --shadow-xl:
+    0 4px 8px -2px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.04 * var(--shadow-k))
+    ),
+    0 20px 40px -10px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.08 * var(--shadow-k))
+    ),
+    0 40px 72px -20px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.08 * var(--shadow-k))
+    );
+  --shadow-2xl:
+    0 6px 12px -4px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.05 * var(--shadow-k))
+    ),
+    0 32px 64px -16px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.1 * var(--shadow-k))
+    ),
+    0 64px 120px -32px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.1 * var(--shadow-k))
+    );
+  /* The 1px top highlight every raised surface gets (see `surface`). */
+  --inset-shadow-edge: inset 0 1px 0 0 var(--edge-hl);
+
+  --ease-soft: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --hue: 262.88;
+  --brand: oklch(0.5461 0.2152 262.88);
+
+  --background: oklch(0.985 0.004 var(--hue));
+  --foreground: oklch(0.18 0.014 var(--hue));
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.18 0.014 var(--hue));
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.18 0.014 var(--hue));
+  --primary: oklch(0.2 0.016 var(--hue));
+  --primary-foreground: oklch(0.985 0.003 var(--hue));
+  --secondary: oklch(0.96 0.007 var(--hue));
+  --secondary-foreground: oklch(0.22 0.014 var(--hue));
+  --muted: oklch(0.965 0.006 var(--hue));
+  --muted-foreground: oklch(0.5 0.016 var(--hue));
+  --accent: oklch(0.955 0.01 var(--hue));
+  --accent-foreground: oklch(0.22 0.014 var(--hue));
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --success: oklch(0.627 0.17 149.21);
+  --warning: oklch(0.769 0.165 70.08);
+  --info: oklch(0.588 0.158 241.97);
+  --border: oklch(0.915 0.008 var(--hue));
+  --input: oklch(0.87 0.012 var(--hue));
+  --ring: oklch(0.62 0.13 var(--hue));
+  --sunken: oklch(0.968 0.006 var(--hue));
+  --edge: oklch(0.35 0.05 var(--hue) / 0.09);
+  --edge-hl: oklch(1 0 0 / 0.75);
+  --shadow-l: 0.32;
+  --shadow-c: 0.06;
+  --shadow-k: 1;
+
+  --radius: 0.75rem;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -84,29 +203,31 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.155 0.008 var(--hue));
+  --foreground: oklch(0.975 0.004 var(--hue));
+  --card: oklch(0.195 0.01 var(--hue));
+  --card-foreground: oklch(0.975 0.004 var(--hue));
+  --popover: oklch(0.215 0.011 var(--hue));
+  --popover-foreground: oklch(0.975 0.004 var(--hue));
+  --primary: oklch(0.975 0.004 var(--hue));
+  --primary-foreground: oklch(0.18 0.012 var(--hue));
+  --secondary: oklch(0.25 0.012 var(--hue));
+  --secondary-foreground: oklch(0.975 0.004 var(--hue));
+  --muted: oklch(0.225 0.01 var(--hue));
+  --muted-foreground: oklch(0.72 0.016 var(--hue));
+  --accent: oklch(0.26 0.014 var(--hue));
+  --accent-foreground: oklch(0.975 0.004 var(--hue));
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --ring: oklch(0.72 0.12 var(--hue));
+  --sunken: oklch(0.13 0.008 var(--hue));
+  --edge: oklch(1 0 0 / 0.08);
+  --edge-hl: oklch(1 0 0 / 0.06);
+  --shadow-l: 0.06;
+  --shadow-c: 0.02;
+  --shadow-k: 3.2;
+
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -117,14 +238,108 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* A raised surface: card fill, hairline ring, top highlight. Add a shadow-*. */
+@utility surface {
+  @apply bg-card text-card-foreground ring-1 ring-edge inset-shadow-edge;
+}
+
+@utility page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 75rem;
+  padding-inline: 1rem;
+  @variant md {
+    padding-inline: 1.5rem;
+  }
+  @variant lg {
+    padding-inline: 2rem;
+  }
+}
+
+@utility text-display {
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+@utility text-title {
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+@utility text-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+}
+
+@utility text-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Code blocks: numbered lines (not selectable or copied) and colour chips. */
+@layer components {
+  .code-lines {
+    counter-reset: line;
+  }
+  /* Block, not flex: flex would drop the whitespace-only indent. */
+  .code-lines > span {
+    position: relative;
+    display: block;
+    min-height: 1lh; /* blank lines keep their height */
+    padding-left: 2.75rem;
+  }
+  .code-lines > span::before {
+    counter-increment: line;
+    content: counter(line);
+    position: absolute;
+    left: 0;
+    width: 1.75rem;
+    text-align: right;
+    color: color-mix(in oklch, var(--muted-foreground) 45%, transparent);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+  }
+  .swatch-chip {
+    display: inline-block;
+    width: 0.625rem;
+    height: 0.625rem;
+    margin-right: 0.375rem;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.12);
+    vertical-align: -1px;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    scrollbar-gutter: stable;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--brand) 22%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 }

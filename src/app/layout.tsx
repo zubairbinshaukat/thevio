@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@/components/analytics";
 import { BRAND_COLORS } from "@/config/brand";
 import { siteConfig } from "@/config/site";
+import { Preloader, PreloaderHead } from "@/features/preloader/preloader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,18 +27,27 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 };
 
-// The site is light-only for now; add a dark entry with the dark theme.
 export const viewport: Viewport = {
-  themeColor: BRAND_COLORS.light,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: BRAND_COLORS.light },
+    { media: "(prefers-color-scheme: dark)", color: BRAND_COLORS.dark },
+  ],
 };
 
+// The <head> script sets `.dark` and a colour-scheme style on <html> before
+// first paint, so <html> differs from the server markup on purpose.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <PreloaderHead />
+      </head>
       <body className="flex min-h-full flex-col">
+        <Preloader />
         {children}
         <Analytics />
       </body>
