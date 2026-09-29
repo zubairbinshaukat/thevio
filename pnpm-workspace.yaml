@@ -1,0 +1,17 @@
+# pnpm 11+ reads its settings from this file.
+# Supply-chain defaults, stated explicitly.
+minimumReleaseAge: 1440
+strictDepBuilds: true
+blockExoticSubdeps: true
+
+# Next.js security releases must not wait out the 24h delay.
+minimumReleaseAgeExclude:
+  - next
+  - "@next/*"
+  - eslint-config-next
+  - create-next-app
+
+allowBuilds:
+  lefthook: true
+  sharp: false
+  unrs-resolver: false

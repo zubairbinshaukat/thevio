@@ -1,0 +1,64 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!.zubair",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!coverage"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe",
+          "options": {
+            "functions": ["cn", "cva"]
+          }
+        }
+      }
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["src/components/ui/**"],
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
+}

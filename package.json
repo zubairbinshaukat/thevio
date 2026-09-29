@@ -1,0 +1,62 @@
+{
+  "name": "thevio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "pnpm lint && pnpm typecheck && pnpm test"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "apca-w3": "^0.1.9",
+    "class-variance-authority": "^0.7.1",
+    "cn": "^0.4.0",
+    "culori": "^4.0.2",
+    "html-to-image": "^1.11.13",
+    "jszip": "^3.10.2",
+    "lucide-react": "^1.48.0",
+    "lz-string": "^1.5.0",
+    "motion": "^13.4.4",
+    "next": "16.3.7",
+    "nuqs": "^2.10.1",
+    "radix-ui": "^1.6.7",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-is": "19.3.0",
+    "recharts": "^3.10.1",
+    "shadcn": "^4.21.0",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/apca-w3": "^0.1.3",
+    "@types/culori": "^4.0.1",
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "babel-plugin-react-compiler": "1.0.0",
+    "jsdom": "^30.1.1",
+    "lefthook": "^2.1.14",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5",
+    "vitest": "^5.0.2"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "pnpm@12.8.1"
+}
