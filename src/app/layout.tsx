@@ -1,7 +1,7 @@
-import { Analytics } from "@vercel/analytics/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Analytics } from "@/components/analytics";
+import { BRAND_COLORS } from "@/config/brand";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -10,9 +10,11 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+// Mono is never in the first paint, so don't let it compete with LCP.
 const geistMono = Geist_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -24,6 +26,11 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 };
 
+// The site is light-only for now; add a dark entry with the dark theme.
+export const viewport: Viewport = {
+  themeColor: BRAND_COLORS.light,
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -31,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <NuqsAdapter>{children}</NuqsAdapter>
+        {children}
         <Analytics />
       </body>
     </html>
