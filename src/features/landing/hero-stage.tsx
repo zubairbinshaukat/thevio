@@ -31,11 +31,6 @@ export function HeroStage({
 
   return (
     <div className="relative">
-      {/* The page's one glow, in the active brand colour. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-x-8 -top-20 bottom-1/3 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,color-mix(in_oklch,var(--brand)_34%,transparent),transparent)] opacity-75 blur-2xl transition-[background] duration-700 dark:opacity-60"
-      />
       <div className="surface rounded-2xl p-1.5 shadow-2xl md:p-2">
         <div className="overflow-hidden rounded-[1.375rem] bg-sunken ring-1 ring-edge md:rounded-xl">
           <TopBar theme={theme} logo={logo} />

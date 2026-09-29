@@ -93,10 +93,15 @@ export default function HomePage() {
               </div>
             </Reveal>
             <Reveal delay={0.2} className="mx-auto mt-12 max-w-6xl md:mt-16">
-              <HeroStage
-                themes={stageSlice()}
-                logo={<Logo decorative className="size-4 shrink-0" />}
-              />
+              {/* Light behind the product shot: pure CSS (globals.css, "Hero light"). */}
+              <div className="hero-light">
+                <div className="hero-shot">
+                  <HeroStage
+                    themes={stageSlice()}
+                    logo={<Logo decorative className="size-4 shrink-0" />}
+                  />
+                </div>
+              </div>
             </Reveal>
           </div>
         </section>

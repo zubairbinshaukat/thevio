@@ -288,6 +288,113 @@
   font-weight: 500;
 }
 
+/*
+ * Hero light: the product shot sits in a pool of theme-coloured light.
+ * All static gradients on pseudo-elements (no JS, no filter: blur, no layout
+ * shift); the only motion is an opacity "breath" on the halo. Every colour
+ * derives from --hue, so the light re-tints with the theme picker.
+ * Light mode: pastel glows at higher opacity. Dark: deeper, lower opacity.
+ */
+@layer components {
+  .hero-light {
+    --glow-a: oklch(0.8 0.11 var(--hue));
+    --glow-b: oklch(0.85 0.08 calc(var(--hue) + 45));
+    --glow-c: oklch(0.83 0.09 calc(var(--hue) - 45));
+    --halo-o: 0.8;
+    --beam: oklch(0.8 0.12 var(--hue) / 0.55);
+    --rim: oklch(0.62 0.16 var(--hue) / 0.7);
+    --dots: oklch(0.5 0.05 var(--hue) / 0.2);
+    position: relative;
+    isolation: isolate;
+  }
+  .dark .hero-light {
+    --glow-a: oklch(0.52 0.15 var(--hue));
+    --glow-b: oklch(0.5 0.13 calc(var(--hue) + 45));
+    --glow-c: oklch(0.48 0.12 calc(var(--hue) - 45));
+    --halo-o: 0.5;
+    --beam: oklch(0.65 0.14 var(--hue) / 0.4);
+    --rim: oklch(0.85 0.1 var(--hue) / 0.75);
+    --dots: oklch(0.85 0.03 var(--hue) / 0.12);
+  }
+  /* A faint dot field for the light to land on, fading out radially. */
+  .hero-light::before {
+    content: "";
+    position: absolute;
+    inset: -4rem -3rem 10%;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      radial-gradient(circle, var(--dots) 1px, transparent 1.5px) 0 0 / 22px
+      22px;
+    mask-image: radial-gradient(60% 55% at 50% 30%, #000, 30%, transparent 75%);
+  }
+  /* The lit rim: a bright hairline where the beam meets the card's top edge. */
+  .hero-light::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--rim), transparent);
+    box-shadow: 0 0 14px 1px var(--beam);
+  }
+  .hero-shot {
+    position: relative;
+  }
+  /* The halo: three offset lobes (brand hue, ±45°), eased with colour hints. */
+  .hero-shot::before {
+    content: "";
+    position: absolute;
+    inset: -12% -10% 20%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(36% 44% at 22% 55%, var(--glow-c), 22%, transparent 70%),
+      radial-gradient(36% 44% at 78% 50%, var(--glow-b), 22%, transparent 70%),
+      radial-gradient(52% 52% at 50% 32%, var(--glow-a), 25%, transparent 72%);
+    opacity: var(--halo-o);
+    transition: background 0.6s;
+  }
+  /* A horizon glow: light rising from behind the card's top edge. */
+  .hero-shot::after {
+    content: "";
+    position: absolute;
+    top: -7.5rem;
+    left: 50%;
+    width: min(64rem, 115%);
+    height: 7.5rem;
+    translate: -50% 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      50% 100% at 50% 100%,
+      var(--beam),
+      40%,
+      transparent
+    );
+  }
+  @keyframes hero-breathe {
+    from {
+      opacity: calc(var(--halo-o) * 0.78);
+    }
+  }
+  @keyframes hero-beam-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-shot::before {
+      animation: hero-breathe 7s ease-in-out infinite alternate;
+    }
+    .hero-shot::after {
+      animation: hero-beam-in 1.6s ease-out 0.4s both;
+    }
+  }
+}
+
 /* Code blocks: numbered lines (not selectable or copied) and colour chips. */
 @layer components {
   .code-lines {
