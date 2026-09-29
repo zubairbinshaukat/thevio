@@ -6,7 +6,7 @@
       "htmlKb": 30,
       "fontFiles": 1,
       "fontKb": 30,
-      "forbid": ["nuqs", "recharts-", "cmdk-"]
+      "forbid": ["nuqs", "recharts-", "cmdk-", "[snapDOM]", "invalid zip data"]
     },
     "studio": {
       "jsKb": 300,
@@ -14,7 +14,7 @@
       "htmlKb": 40,
       "fontFiles": 2,
       "fontKb": 60,
-      "forbid": ["recharts-", "cmdk-"]
+      "forbid": ["recharts-", "cmdk-", "[snapDOM]", "invalid zip data"]
     }
   },
   "routes": [

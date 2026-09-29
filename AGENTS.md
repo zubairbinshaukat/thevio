@@ -19,7 +19,9 @@ Thevio is a visual theme builder: build one theme, preview it everywhere, share 
 
 Next.js 16 (App Router, Turbopack, React Compiler, typed routes) · React 19 · TypeScript (strict) · Tailwind CSS v4 · shadcn/ui (Radix base) · Biome · Vitest + Testing Library · lefthook · pnpm 12 · Node 24.
 
-Runtime libs for later phases: zod, nuqs, lz-string, culori, apca-w3, recharts, motion, jszip, html-to-image, @vercel/analytics.
+Runtime libs for later phases: zod, nuqs, lz-string, culori, recharts, motion, fflate (ZIP), @zumer/snapdom (PNG), @vercel/analytics. Contrast is WCAG 2 only (culori `wcagContrast`); there is no APCA.
+
+- **fflate and SnapDOM load only on Export click** (`import()` inside the handler, prefetched on hover). Never import them statically: `perf:budget` fails if their code reaches any route's initial JS.
 
 ## Folder rules
 
