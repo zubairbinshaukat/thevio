@@ -1,0 +1,257 @@
+/*
+ * Preview components: Thevio's own UI, styled only by a theme's variables
+ * and the component tokens on the nearest `.tv-preview` root (ThemeScope).
+ * A separate Tailwind build scanning only this folder, imported by
+ * theme-scope.tsx, so it loads only on routes that render previews.
+ *
+ * Rules (see DESIGN.md §8):
+ * - No `dark:`: the chrome's `.dark` would leak in. Modes are variables.
+ * - No theme radius/shadow utilities: they're removed below so they can't
+ *   collide with the chrome's; use rounded-(--radius) etc.
+ * - Token branches use :where(), adding no specificity.
+ */
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@source "./";
+
+@theme {
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-soft: var(--tv-soft-bg);
+  --color-soft-foreground: var(--tv-soft-fg);
+  --color-primary-text: var(--tv-primary-text);
+  --color-field: var(--tv-field);
+  --color-line: var(--tv-line);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+}
+
+/* The scope root: reset what the chrome would otherwise pass down. */
+@layer base {
+  .tv-preview {
+    --brand: var(--primary);
+    contain: layout;
+    isolation: isolate;
+    position: relative;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: normal;
+    font-size: var(--tv-text);
+    letter-spacing: var(--tracking-normal);
+    line-height: 1.5;
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+  }
+  .tv-preview[data-mode="dark"] {
+    color-scheme: dark;
+  }
+  .tv-preview :where(h1, h2, h3, h4) {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Surfaces: cards, panels. Border, shadow, both, or flat. */
+@utility tv-surface {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: var(--tv-surface-border) solid var(--border);
+  border-radius: calc(var(--radius) * 1.4);
+  box-shadow: var(--tv-surface-shadow);
+  &:where([data-surface="shadow"] *) {
+    box-shadow:
+      var(--shadow-md),
+      0 0 0 1px color-mix(in oklch, var(--foreground) 6%, transparent);
+  }
+  &:where([data-surface="flat"] *) {
+    background: var(--muted);
+  }
+}
+
+/* Floating content (menus, popovers, dialogs) always keeps an edge. */
+@utility tv-overlay {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.2);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Focus: ring (border + halo), outline (offset line), glow (solid band + bloom). */
+@utility tv-focus {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid transparent;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent);
+  }
+  &:where([data-focus="outline"] *):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 #0000;
+  }
+  &:where([data-focus="glow"] *):focus-visible {
+    box-shadow:
+      0 0 0 2px var(--ring),
+      0 0 0 5px color-mix(in oklch, var(--ring) 25%, transparent),
+      0 0 16px 4px color-mix(in oklch, var(--ring) 35%, transparent);
+  }
+}
+
+/* The primary action: solid, soft or outline. */
+@utility tv-btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: transparent;
+  &:hover {
+    background: color-mix(
+      in oklch,
+      var(--primary),
+      var(--foreground) calc(var(--tv-hover-shift) * 100%)
+    );
+  }
+  &:where([data-button-style="soft"] *) {
+    background: var(--tv-soft-bg);
+    color: var(--tv-soft-fg);
+    &:hover {
+      background: color-mix(in oklch, var(--tv-soft-bg), var(--primary) 8%);
+    }
+  }
+  &:where([data-button-style="outline"] *) {
+    background: transparent;
+    color: var(--tv-primary-text);
+    border-color: var(--primary);
+    &:hover {
+      background: color-mix(in oklch, var(--primary) 8%, transparent);
+    }
+  }
+}
+
+/* Text fields and select triggers: outline, filled or underline. */
+@utility tv-field {
+  height: var(--tv-control-h);
+  width: 100%;
+  padding-inline: calc(var(--tv-pad-x) * 0.75);
+  border: 1px solid var(--input);
+  border-radius: min(var(--tv-btn-radius), calc(var(--radius) * 1.2));
+  background: transparent;
+  color: var(--foreground);
+  font-size: var(--tv-text);
+  &::placeholder {
+    color: var(--muted-foreground);
+  }
+  &:is(textarea) {
+    height: auto;
+    min-height: 5rem;
+    padding-block: 0.5rem;
+    resize: vertical;
+  }
+  &:where([data-input="filled"] *) {
+    background: var(--tv-field);
+    border-color: transparent;
+    border-bottom-color: var(--tv-line);
+  }
+  &:where([data-input="underline"] *) {
+    border-width: 0 0 1px;
+    border-color: var(--tv-line);
+    border-radius: 0;
+    padding-inline: 0;
+    /* The underline is the whole field: focus thickens it, whatever the
+       focus token, and beats tv-focus (higher specificity). */
+    &:focus-visible:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: inset 0 -1px 0 var(--ring);
+    }
+  }
+}
+
+/* Tabs: segmented (track + raised chip), pill (soft chips), underline. */
+@utility tv-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 3px;
+  border-radius: calc(var(--radius) + 3px);
+  background: var(--muted);
+  &:where([data-tabs="pill"] *) {
+    gap: 0.25rem;
+    padding: 0;
+    background: transparent;
+  }
+  &:where([data-tabs="underline"] *) {
+    gap: 1.25rem;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: inset 0 -1px 0 var(--border);
+  }
+}
+
+@utility tv-tab {
+  height: calc(var(--tv-control-h) - 6px);
+  padding-inline: calc(var(--tv-pad-x) * 0.75);
+  border-radius: var(--radius);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  &[data-state="active"] {
+    background: var(--background);
+    color: var(--foreground);
+    box-shadow: var(--shadow-sm);
+  }
+  &:where([data-tabs="pill"] *) {
+    border-radius: 9999px;
+    &:hover {
+      color: var(--foreground);
+    }
+    &[data-state="active"] {
+      background: var(--tv-soft-bg);
+      color: var(--tv-soft-fg);
+      box-shadow: 0 0 #0000;
+    }
+  }
+  &:where([data-tabs="underline"] *) {
+    height: var(--tv-control-h);
+    padding-inline: 0;
+    border-radius: 0;
+    &[data-state="active"] {
+      background: transparent;
+      box-shadow: inset 0 -2px 0 var(--primary);
+    }
+  }
+}

@@ -249,7 +249,48 @@ The landing page carries real data and still fits the `marketing` budget (JS 145
 
 Headroom is small: the next landing feature should move more into lazy JSON or server markup.
 
-## 7. Verification checklist
+## 8. Preview style layer (M3)
+
+Research (2026-09-30):
+- **Radix Themes is the closest model.** One root carries CSS variables and `data-*` attributes; variants are zero-specificity `:where()` selectors, and overlays are re-themed through a portal container.
+- **shadcn "create" styles (Maia, Lyra, Vega) show what a style changes:** radius, fill vs line, density and focus treatment.
+- **tweakcn and Realtime Colors don't scope at all.**
+
+What Thevio does:
+- **One root, `ThemeScope`** (`src/features/preview/theme-scope.tsx`).
+  - It carries `toScope(resolved, mode)`: every theme variable, the `--tv-*` component variables, and `data-surface`, `data-density`, `data-button`, `data-button-style`, `data-input`, `data-focus`, `data-tabs` and `data-mode`.
+  - Overlays portal into a node inside the root, so dialogs, menus, selects and tooltips keep the theme. `contain: layout` makes a dialog cover only its preview.
+  - Scopes can't nest, because token selectors match any ancestor.
+- **`data-mode`, not `.dark`** (amends plan §D.2). The chrome's `.dark` would pull the site's own variables into the preview. Preview components never use `dark:`; every mode difference is a variable.
+- **Its own stylesheet** (`preview.css`): a second Tailwind build that scans only `src/features/preview/`, imported by `ThemeScope`. It loads only where previews render, so it never grows the site's global CSS; `globals.css` excludes that folder.
+  - Theme radius and shadow utilities are removed from that build, so preview code can't collide with the chrome's `rounded-lg`/`shadow-md`. Use `rounded-(--radius)` and the like instead.
+  - Each style is one `@utility` with `:where([data-…] *)` branches: `tv-surface`, `tv-overlay`, `tv-focus`, `tv-btn-primary`, `tv-field`, `tv-tabs`, `tv-tab`.
+- **Contrast is guaranteed, not hoped for.** Colours a style derives are computed in core (`resolve.ts`, using `mixOklch`, which matches CSS `color-mix(in oklch)`) and solved to their WCAG 2 targets:
+
+  | Colour | Target |
+  |---|---|
+  | `--tv-soft-bg` | primary tinted 12% (light) / 20% (dark) into the page |
+  | `--tv-soft-fg` | ≥ 4.5:1 on the soft fill |
+  | `--tv-primary-text` | ≥ 4.5:1 on page and card |
+  | `--tv-field` | the filled-input background |
+  | `--tv-line` | ≥ 3:1 on page, card and field; the boundary of underline and filled inputs, checkboxes, radios and switch tracks |
+
+  `checkComponentPairs` proves each one. The Studio page checks 168 pairs at build time and fails the build on any miss.
+
+The three presets:
+
+| | shadcn | Soft | Crisp |
+|---|---|---|---|
+| Surfaces | hairline border | floating shadow | flat tinted panel |
+| Density | default | comfortable | compact |
+| Buttons | rounded, solid | pill, soft tint | square, outline |
+| Inputs | outlined | filled, bottom line | underline only |
+| Focus | ring + halo | glow | offset outline |
+| Tabs | segmented | pill | underline |
+
+**Where to see it:** `/studio` shows all four sample themes × three presets × both modes side by side (the acceptance check), until the editor replaces it. Radix and the preview components cost `/studio` ~52 KB gzip of JS (now 189 KB of its 300 KB budget).
+
+## 9. Verification checklist
 
 - [x] Screenshots at 375 / 768 / 1440, light and dark, plus the preloader mid-animation and with `?t=` (Ember link, light and dark), the curtain mid-flight, and reduced motion.
 - [x] No horizontal scroll at 375, 768 or 1440.

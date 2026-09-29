@@ -31,6 +31,12 @@ export function modeVars(
       name,
       formatOklch(color),
     ]),
+    ...Object.entries(resolved.components.colors[mode]).map(
+      ([name, color]): [string, string] => [
+        `tv-${name.replace(/[A-Z]/g, (ch) => `-${ch.toLowerCase()}`)}`,
+        formatOklch(color),
+      ],
+    ),
   ];
 }
 

@@ -31,9 +31,12 @@ exports[`toCss > matches the golden output 1`] = `
   --tv-control-h: 2.25rem;
   --tv-pad-x: 1rem;
   --tv-gap: 0.75rem;
+  --tv-card-pad: 1.5rem;
+  --tv-row-h: 2.5rem;
+  --tv-text: 0.875rem;
   --tv-btn-radius: 0.625rem;
   --tv-surface-border: 1px;
-  --tv-surface-shadow: none;
+  --tv-surface-shadow: 0 0 #0000;
   --tv-ring-width: 3px;
   --tv-ring-offset: 0px;
   --tv-hover-shift: 0.05;
@@ -75,6 +78,11 @@ exports[`toCss > matches the golden output 1`] = `
   --warning-foreground: oklch(0.205 0.04 70.08);
   --info: oklch(0.588 0.158 241.97);
   --info-foreground: oklch(0 0 0);
+  --tv-soft-bg: oklch(0.9455 0.0258 262.88);
+  --tv-soft-fg: oklch(0.5408 0.2152 262.88);
+  --tv-primary-text: oklch(0.5461 0.2152 262.88);
+  --tv-field: oklch(0.97 0 0);
+  --tv-line: oklch(0.6462 0 0);
 }
 
 .dark {
@@ -116,6 +124,11 @@ exports[`toCss > matches the golden output 1`] = `
   --warning-foreground: oklch(0 0 0);
   --info: oklch(0.588 0.158 241.97);
   --info-foreground: oklch(0 0 0);
+  --tv-soft-bg: oklch(0.2252 0.043 262.88);
+  --tv-soft-fg: oklch(0.6181 0.2057 262.88);
+  --tv-primary-text: oklch(0.6079 0.2121 262.88);
+  --tv-field: oklch(0.269 0 0);
+  --tv-line: oklch(1 0 0 / 33.9%);
 }
 
 @theme inline {

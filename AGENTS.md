@@ -22,6 +22,7 @@ Next.js 16 (App Router, Turbopack, React Compiler, typed routes) · React 19 · 
 Runtime libs for later phases: zod, nuqs, lz-string, culori, recharts, motion, fflate (ZIP), @zumer/snapdom (PNG), @vercel/analytics. Contrast is WCAG 2 only (culori `wcagContrast`); there is no APCA.
 
 - **Marketing client code** uses `cx` (`src/lib/cx.ts`) instead of `cn`, and `src/components/icons.tsx` instead of lucide-react: both keep `/` inside its JS budget (see DESIGN.md §6). The preloader lives in `src/features/preloader/`; its scripts are inlined with `.toString()`, so they must stay self-contained.
+- **Preview components** (`src/features/preview/`) have their own Tailwind build (`preview.css`) and are styled only by theme variables and `data-*` tokens from `ThemeScope`. No `dark:` there, and no chrome utilities; chrome-styled UI goes in `features/studio/` (see DESIGN.md §8).
 - **fflate and SnapDOM load only on Export click** (`import()` inside the handler, prefetched on hover). Never import them statically: `perf:budget` fails if their code reaches any route's initial JS.
 
 ## Folder rules

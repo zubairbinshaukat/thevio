@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Preview components get their own build (features/preview/preview.css),
+   loaded only where previews render, so they never grow this sheet. */
+@source not "../features/preview";
+
 @custom-variant dark (&:is(.dark *));
 
 /*

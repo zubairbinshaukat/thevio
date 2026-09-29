@@ -11,9 +11,10 @@ import {
   darkNeutral,
   whiteOverlay,
 } from "../color/dark";
+import { mixOklch } from "../color/mix";
 import { brandScale, neutralScale, type Scale } from "../color/scale";
-import { pickOnColor } from "../contrast/solve";
-import { WCAG } from "../contrast/wcag";
+import { fixForeground, fixLightness, pickOnColor } from "../contrast/solve";
+import { contrastRatio, WCAG } from "../contrast/wcag";
 import { fromColorValue, type Theme } from "./schema";
 import type { ComponentTokens } from "./style-presets";
 import { COLOR_TOKENS, type ColorToken, type ColorTokens } from "./tokens";
@@ -80,8 +81,27 @@ export type ResolvedTheme = {
     readonly vars: Readonly<Record<string, string>>;
     /** `data-*` attributes for the preview root. */
     readonly attributes: Readonly<Record<string, string>>;
+    /** Colours the component styles derive, per mode; contrast-checked. */
+    readonly colors: Readonly<Record<Mode, ComponentColors>>;
   };
 };
+
+/**
+ * Colours that component styles derive from the tokens. Computed here, not
+ * with CSS color-mix, so their contrast is guaranteed and testable.
+ */
+export type ComponentColors = Readonly<{
+  /** Soft button / pill tab fill: primary tinted into the page. */
+  softBg: Oklch;
+  /** Text on `softBg` (≥ 4.5:1). */
+  softFg: Oklch;
+  /** Primary used as text on the page and on cards (outline buttons, links; ≥ 4.5:1). */
+  primaryText: Oklch;
+  /** Filled input background. */
+  field: Oklch;
+  /** Input boundary line: underline inputs, filled inputs' bottom edge (≥ 3:1 on page, card and field). */
+  line: Oklch;
+}>;
 
 const WHITE = oklch(1, 0, 0);
 
@@ -277,20 +297,50 @@ function resolveShadows({ shadow }: Theme): Record<ShadowSize, string> {
 const CONTROL_HEIGHT = { compact: 2, default: 2.25, comfortable: 2.5 };
 const PADDING_X = { compact: 0.75, default: 1, comfortable: 1.25 };
 const GAP = { compact: 0.5, default: 0.75, comfortable: 1 };
+const CARD_PAD = { compact: 1, default: 1.5, comfortable: 2 };
+const ROW_HEIGHT = { compact: 2, default: 2.5, comfortable: 3 };
+const TEXT = { compact: 0.8125, default: 0.875, comfortable: 0.9375 };
+/** How much primary tints a soft fill, per mode. */
+const SOFT_TINT: Record<Mode, number> = { light: 0.12, dark: 0.2 };
+/** An empty box-shadow that, unlike `none`, can sit in a comma list. */
+const NO_SHADOW = "0 0 #0000";
+
+function componentColors(tokens: ColorTokens, mode: Mode): ComponentColors {
+  const { background, card, primary, foreground, muted, input } = tokens;
+  const softBg = mixOklch(background, primary, SOFT_TINT[mode]);
+  const softFg = fixLightness(primary, softBg, WCAG.text) ?? foreground;
+
+  // Must pass on both the page and cards; fall back to plain text colour.
+  let primaryText = fixLightness(primary, background, WCAG.text) ?? foreground;
+  primaryText = fixLightness(primaryText, card, WCAG.text) ?? foreground;
+  if (contrastRatio(primaryText, background) < WCAG.text) {
+    primaryText = foreground;
+  }
+
+  const field = muted;
+  let line = input;
+  for (const surface of [background, card, field]) {
+    line = fixForeground(line, surface, WCAG.ui) ?? line;
+  }
+  return { softBg, softFg, primaryText, field, line };
+}
 const FOCUS = {
   ring: { width: "3px", offset: "0px" },
   outline: { width: "2px", offset: "2px" },
   glow: { width: "4px", offset: "0px" },
 };
 
-function resolveComponents(theme: Theme) {
+function resolveComponents(
+  theme: Theme,
+  colors: Readonly<Record<Mode, ColorTokens>>,
+) {
   const tokens = theme.components;
   const border = px(theme.border.width);
   const surface = {
-    border: { border, shadow: "none" },
+    border: { border, shadow: NO_SHADOW },
     shadow: { border: "0px", shadow: "var(--shadow-sm)" },
     both: { border, shadow: "var(--shadow-sm)" },
-    flat: { border: "0px", shadow: "none" },
+    flat: { border: "0px", shadow: NO_SHADOW },
   }[tokens.surfaceStyle];
   const buttonRadius = {
     square: "0.125rem",
@@ -304,6 +354,9 @@ function resolveComponents(theme: Theme) {
       "--tv-control-h": `${CONTROL_HEIGHT[tokens.density]}rem`,
       "--tv-pad-x": `${PADDING_X[tokens.density]}rem`,
       "--tv-gap": `${GAP[tokens.density]}rem`,
+      "--tv-card-pad": `${CARD_PAD[tokens.density]}rem`,
+      "--tv-row-h": `${ROW_HEIGHT[tokens.density]}rem`,
+      "--tv-text": `${TEXT[tokens.density]}rem`,
       "--tv-btn-radius": buttonRadius,
       "--tv-surface-border": surface.border,
       "--tv-surface-shadow": surface.shadow,
@@ -320,6 +373,10 @@ function resolveComponents(theme: Theme) {
       "data-focus": tokens.focusRing,
       "data-tabs": tokens.tabStyle,
     },
+    colors: {
+      light: componentColors(colors.light, "light"),
+      dark: componentColors(colors.dark, "dark"),
+    },
   };
 }
 
@@ -333,9 +390,10 @@ export function resolveTheme(theme: Theme): ResolvedTheme {
     ]),
   ) as Record<RadiusSize, number>;
 
+  const colors = resolveColors(theme);
   return {
     theme,
-    ...resolveColors(theme),
+    ...colors,
     radius: { base: theme.radius, ...radius },
     shadows: resolveShadows(theme),
     fonts: {
@@ -346,6 +404,6 @@ export function resolveTheme(theme: Theme): ResolvedTheme {
     letterSpacing: theme.letterSpacing,
     spacing: theme.spacing,
     borderWidth: theme.border.width,
-    components: resolveComponents(theme),
+    components: resolveComponents(theme, colors.colors),
   };
 }
