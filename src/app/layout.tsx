@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@/components/analytics";
+import { BRAND_COLORS } from "@/config/brand";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -23,6 +24,11 @@ export const metadata: Metadata = {
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
+};
+
+// The site is light-only for now; add a dark entry with the dark theme.
+export const viewport: Viewport = {
+  themeColor: BRAND_COLORS.light,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

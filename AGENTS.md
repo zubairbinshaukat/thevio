@@ -62,5 +62,8 @@ scripts/        # build-time Node scripts (.mts, run with plain `node`)
 | `pnpm test` / `test:watch` | Vitest |
 | `pnpm check` | lint + typecheck + test |
 | `pnpm perf:budget` | build, then fail if any route exceeds `perf-budgets.json` |
+| `pnpm icons` | regenerate every icon from the mark in `src/config/brand.ts` |
+
+**Brand:** the mark lives once, as paths, in `src/config/brand.ts`. Use `<Logo />` (`src/components/logo.tsx`) in UI; it takes `currentColor`, so it's black on light and white on dark. Never copy the paths elsewhere; after changing them run `pnpm icons` and commit the outputs.
 
 Git hooks (lefthook): pre-commit runs Biome on staged files; pre-push runs typecheck + test. CI (`.github/workflows/ci.yml`) runs lint, typecheck, test and `perf:budget`.
