@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`fixContrast on shadcn's neutral theme > matches the golden fixes (dark) 1`] = `
+{
+  "fixes": [
+    "destructive-foreground: oklch(0.985 0 0) → oklch(0.3149 0 0) (2.75 → 4.51)",
+    "input: oklch(1 0 0 / 15%) → oklch(1 0 0 / 33.9%) (1.47 → 3.01)",
+    "chart-1: oklch(0.488 0.243 264.38) → oklch(0.5185 0.243 264.38) (2.63 → 3.01)",
+  ],
+  "impossible": [],
+}
+`;
+
+exports[`fixContrast on shadcn's neutral theme > matches the golden fixes (light) 1`] = `
+{
+  "fixes": [
+    "muted-foreground: oklch(0.556 0 0) → oklch(0.5468 0 0) (4.34 → 4.51)",
+    "input: oklch(0.922 0 0) → oklch(0.6686 0 0) (1.26 → 3.01)",
+    "ring: oklch(0.708 0 0) → oklch(0.6686 0 0) (2.59 → 3.01)",
+    "sidebar-ring: oklch(0.708 0 0) → oklch(0.6574 0 0) (2.48 → 3.01)",
+    "chart-4: oklch(0.828 0.189 84.43) → oklch(0.6715 0.1377 84.43) (1.72 → 3.01)",
+    "chart-5: oklch(0.769 0.188 70.08) → oklch(0.6763 0.1464 70.08) (2.15 → 3.01)",
+  ],
+  "impossible": [],
+}
+`;

@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`chartPalette > matches the golden palettes 1`] = `
+{
+  "dark": [
+    "oklch(0.7 0.1574 259.81)",
+    "oklch(0.58 0.1537 49.81)",
+    "oklch(0.86 0.1027 339.81)",
+    "oklch(0.64 0.1395 109.81)",
+    "oklch(0.9 0.188 124.81)",
+  ],
+  "light": [
+    "oklch(0.6 0.188 259.81)",
+    "oklch(0.6835 0.1658 49.81)",
+    "oklch(0.48 0.188 319.81)",
+    "oklch(0.4755 0.0943 169.81)",
+    "oklch(0.6543 0.1154 184.81)",
+  ],
+}
+`;
