@@ -12,7 +12,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "pnpm lint && pnpm typecheck && pnpm test"
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "perf:budget": "pnpm build && node scripts/check-budgets.mts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

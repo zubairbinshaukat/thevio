@@ -1,0 +1,25 @@
+{
+  "budgets": {
+    "marketing": {
+      "jsKb": 145,
+      "cssKb": 12,
+      "htmlKb": 30,
+      "fontFiles": 1,
+      "fontKb": 30,
+      "forbid": ["nuqs", "recharts-", "cmdk-"]
+    },
+    "studio": {
+      "jsKb": 300,
+      "cssKb": 20,
+      "htmlKb": 40,
+      "fontFiles": 2,
+      "fontKb": 60,
+      "forbid": ["recharts-", "cmdk-"]
+    }
+  },
+  "routes": [
+    { "path": "/", "budget": "marketing" },
+    { "path": "/themes/shadcn", "budget": "marketing" },
+    { "path": "/studio", "budget": "studio" }
+  ]
+}
