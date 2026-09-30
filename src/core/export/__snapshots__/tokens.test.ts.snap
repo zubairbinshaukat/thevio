@@ -1,0 +1,356 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`toDtcg > matches the golden light file 1`] = `
+"{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "$type": "color",
+    "background": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "hex": "#ffffff"
+      },
+      "$description": "Default app background."
+    },
+    "foreground": {
+      "$value": "{palette.neutral.950}",
+      "$description": "Default text on background."
+    },
+    "card": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "hex": "#ffffff"
+      },
+      "$description": "Elevated surfaces: cards, panels."
+    },
+    "card-foreground": {
+      "$value": "{palette.neutral.950}",
+      "$description": "Text on cards."
+    },
+    "popover": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "hex": "#ffffff"
+      },
+      "$description": "Floating surfaces: popovers, menus, dialogs."
+    },
+    "popover-foreground": {
+      "$value": "{palette.neutral.950}",
+      "$description": "Text on popovers."
+    },
+    "primary": {
+      "$value": "{palette.brand.600}",
+      "$description": "High-emphasis actions and brand surfaces."
+    },
+    "primary-foreground": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.985,
+          0.007,
+          262.88
+        ],
+        "hex": "#f8faff"
+      },
+      "$description": "Text and icons on primary."
+    },
+    "secondary": {
+      "$value": "{palette.neutral.100}",
+      "$description": "Lower-emphasis filled actions."
+    },
+    "secondary-foreground": {
+      "$value": "{palette.neutral.900}",
+      "$description": "Text on secondary."
+    },
+    "muted": {
+      "$value": "{palette.neutral.100}",
+      "$description": "Subtle surfaces: tracks, skeletons, empty states."
+    },
+    "muted-foreground": {
+      "$value": "{palette.neutral.500}",
+      "$description": "Lower-emphasis text: descriptions, placeholders."
+    },
+    "accent": {
+      "$value": "{palette.neutral.100}",
+      "$description": "Hover, focus and selected surfaces."
+    },
+    "accent-foreground": {
+      "$value": "{palette.neutral.900}",
+      "$description": "Text on accent."
+    },
+    "destructive": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.577,
+          0.245,
+          27.33
+        ],
+        "hex": "#e40016"
+      },
+      "$description": "Destructive actions and errors."
+    },
+    "destructive-foreground": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.985,
+          0.0072,
+          27.33
+        ],
+        "hex": "#fff8f7"
+      },
+      "$description": "Text on destructive (tweakcn compatibility)."
+    },
+    "border": {
+      "$value": "{palette.neutral.200}",
+      "$description": "Default borders and dividers."
+    },
+    "input": {
+      "$value": "{palette.neutral.200}",
+      "$description": "Form control borders."
+    },
+    "ring": {
+      "$value": "{palette.neutral.400}",
+      "$description": "Focus rings."
+    },
+    "chart-1": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.6,
+          0.2,
+          262.88
+        ],
+        "hex": "#3b77f5"
+      },
+      "$description": "Chart series 1."
+    },
+    "chart-2": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.6831,
+          0.1701,
+          52.88
+        ],
+        "hex": "#e8750e"
+      },
+      "$description": "Chart series 2."
+    },
+    "chart-3": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.48,
+          0.2,
+          322.88
+        ],
+        "hex": "#8f219d"
+      },
+      "$description": "Chart series 3."
+    },
+    "chart-4": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.4739,
+          0.0911,
+          172.88
+        ],
+        "hex": "#006c57"
+      },
+      "$description": "Chart series 4."
+    },
+    "chart-5": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.6547,
+          0.1139,
+          187.88
+        ],
+        "hex": "#00a69d"
+      },
+      "$description": "Chart series 5."
+    },
+    "sidebar": {
+      "$value": "{palette.neutral.50}",
+      "$description": "Sidebar surface."
+    },
+    "sidebar-foreground": {
+      "$value": "{palette.neutral.950}",
+      "$description": "Sidebar text."
+    },
+    "sidebar-primary": {
+      "$value": "{palette.brand.600}",
+      "$description": "Active items inside the sidebar."
+    },
+    "sidebar-primary-foreground": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.985,
+          0.007,
+          262.88
+        ],
+        "hex": "#f8faff"
+      },
+      "$description": "Text on sidebar-primary."
+    },
+    "sidebar-accent": {
+      "$value": "{palette.neutral.100}",
+      "$description": "Hovered and open items inside the sidebar."
+    },
+    "sidebar-accent-foreground": {
+      "$value": "{palette.neutral.900}",
+      "$description": "Text on sidebar-accent."
+    },
+    "sidebar-border": {
+      "$value": "{palette.neutral.200}",
+      "$description": "Sidebar dividers."
+    },
+    "sidebar-ring": {
+      "$value": "{palette.neutral.400}",
+      "$description": "Focus rings inside the sidebar."
+    },
+    "success": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.627,
+          0.17,
+          149.21
+        ],
+        "hex": "#16a34a"
+      },
+      "$description": "Success states and positive values."
+    },
+    "success-foreground": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.205,
+          0.04,
+          149.21
+        ],
+        "hex": "#081c0d"
+      },
+      "$description": "Text on success."
+    },
+    "warning": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.769,
+          0.165,
+          70.08
+        ],
+        "hex": "#f59e09"
+      },
+      "$description": "Warnings."
+    },
+    "warning-foreground": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.205,
+          0.04,
+          70.08
+        ],
+        "hex": "#231302"
+      },
+      "$description": "Text on warning."
+    },
+    "info": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.588,
+          0.158,
+          241.97
+        ],
+        "hex": "#0084c7"
+      },
+      "$description": "Informational states."
+    },
+    "info-foreground": {
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "hex": "#000000"
+      },
+      "$description": "Text on info."
+    }
+  },
+  "component": {
+    "color": {
+      "$type": "color",
+      "soft-bg": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9455,
+            0.0258,
+            262.88
+          ],
+          "hex": "#e4edff"
+        },
+        "$description": "Soft fill: soft buttons, pill tabs. Primary tinted into the page."
+      },
+      "soft-fg": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.5408,
+            0.2152,
+            262.88
+          ],
+          "hex": "#2361e9"
+        },
+        "$description": "Text on the soft fill (≥ 4.5:1)."
+      },
+      "primary-text": {
+        "$value": "{palette.brand.600}",
+        "$description": "Primary as text on the page and cards (≥ 4.5:1)."
+      },
+      "field": {
+        "$value": "{palette.neutral.100}",
+        "$description": "Filled input background."
+      },
+      "line": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.6462,
+            0,
+            0
+          ],
+          "hex": "#8e8e8e"
+        },
+        "$description": "Input boundary line (≥ 3:1 on page, card and field)."
+      }
+    }
+  }
+}
+"
+`;

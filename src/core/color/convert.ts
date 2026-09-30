@@ -8,6 +8,7 @@ import {
   converter,
   formatHex as culoriFormatHex,
   parse as culoriParse,
+  modeHsl,
   modeLrgb,
   modeOklab,
   modeOklch,
@@ -19,6 +20,8 @@ import {
 } from "culori/fn";
 
 registerMode(modeRgb);
+// hsl() is how most shadcn themes before Tailwind v4 were written.
+registerMode(modeHsl);
 registerMode(modeLrgb);
 registerMode(modeOklab);
 registerMode(modeP3);

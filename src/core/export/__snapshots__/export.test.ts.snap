@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`toCss > matches the golden output 1`] = `
-"/* Thevio theme "Untitled" · globals.css · https://thevio.zubyr.dev */
+"/* Thevio theme "Untitled" · globals.css · https://thevio.zubyr.dev/studio?t=1N4IgbiBcCMC+Q */
 
 /*
  * Component style (the --tv-* variables encode it):
@@ -170,6 +170,11 @@ exports[`toCss > matches the golden output 1`] = `
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-tv-soft-bg: var(--tv-soft-bg);
+  --color-tv-soft-fg: var(--tv-soft-fg);
+  --color-tv-primary-text: var(--tv-primary-text);
+  --color-tv-field: var(--tv-field);
+  --color-tv-line: var(--tv-line);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-heading: var(--font-heading);

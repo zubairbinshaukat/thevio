@@ -50,6 +50,15 @@ export const SHADOW_SIZES = [
 ] as const;
 export type ShadowSize = (typeof SHADOW_SIZES)[number];
 
+/** One box-shadow layer; lengths in px. */
+export type ShadowLayer = {
+  readonly x: number;
+  readonly y: number;
+  readonly blur: number;
+  readonly spread: number;
+  readonly color: Oklch;
+};
+
 export type ResolvedTheme = {
   readonly theme: Theme;
   readonly scales: {
@@ -65,7 +74,9 @@ export type ResolvedTheme = {
   readonly radius: { readonly base: number } & Readonly<
     Record<RadiusSize, number>
   >;
-  /** CSS box-shadow values. */
+  /** The shadow scale as layers, px, for token formats. */
+  readonly shadowLayers: Readonly<Record<ShadowSize, readonly ShadowLayer[]>>;
+  /** The same scale as CSS box-shadow values. */
   readonly shadows: Readonly<Record<ShadowSize, string>>;
   readonly fonts: {
     readonly sans: string;
@@ -273,26 +284,46 @@ const round = (value: number, digits = 4) =>
 const px = (value: number) => `${round(value, 2)}px`;
 
 /** tweakcn-compatible scale: one base shadow, plus a contact layer from sm. */
-function resolveShadows({ shadow }: Theme): Record<ShadowSize, string> {
+function resolveShadowLayers({
+  shadow,
+}: Theme): Record<ShadowSize, ShadowLayer[]> {
   const color = shadow.color ? fromColorValue(shadow.color) : oklch(0, 0, 0);
   const tint = (factor: number) =>
-    formatOklch({
-      ...color,
-      alpha: round(Math.min(1, shadow.opacity * factor), 3),
-    });
-  const base = `${px(shadow.x)} ${px(shadow.y)} ${px(shadow.blur)} ${px(shadow.spread)}`;
-  const layered = (y: number, blur: number) =>
-    `${base} ${tint(1)}, ${px(shadow.x)} ${px(y)} ${px(blur)} ${px(shadow.spread - 1)} ${tint(1)}`;
+    oklch(
+      color.l,
+      color.c,
+      color.h,
+      round(Math.min(1, shadow.opacity * factor), 3),
+    );
+  const base = (factor: number): ShadowLayer => ({
+    x: shadow.x,
+    y: shadow.y,
+    blur: shadow.blur,
+    spread: shadow.spread,
+    color: tint(factor),
+  });
+  const layered = (y: number, blur: number): ShadowLayer[] => [
+    base(1),
+    { x: shadow.x, y, blur, spread: shadow.spread - 1, color: tint(1) },
+  ];
   return {
-    "2xs": `${base} ${tint(0.5)}`,
-    xs: `${base} ${tint(0.5)}`,
+    "2xs": [base(0.5)],
+    xs: [base(0.5)],
     sm: layered(1, 2),
     md: layered(2, 4),
     lg: layered(4, 6),
     xl: layered(8, 10),
-    "2xl": `${base} ${tint(2.5)}`,
+    "2xl": [base(2.5)],
   };
 }
+
+const formatShadow = (layers: readonly ShadowLayer[]) =>
+  layers
+    .map(
+      ({ x, y, blur, spread, color }) =>
+        `${px(x)} ${px(y)} ${px(blur)} ${px(spread)} ${formatOklch(color)}`,
+    )
+    .join(", ");
 
 const CONTROL_HEIGHT = { compact: 2, default: 2.25, comfortable: 2.5 };
 const PADDING_X = { compact: 0.75, default: 1, comfortable: 1.25 };
@@ -391,11 +422,15 @@ export function resolveTheme(theme: Theme): ResolvedTheme {
   ) as Record<RadiusSize, number>;
 
   const colors = resolveColors(theme);
+  const shadowLayers = resolveShadowLayers(theme);
   return {
     theme,
     ...colors,
     radius: { base: theme.radius, ...radius },
-    shadows: resolveShadows(theme),
+    shadowLayers,
+    shadows: Object.fromEntries(
+      SHADOW_SIZES.map((size) => [size, formatShadow(shadowLayers[size])]),
+    ) as Record<ShadowSize, string>,
     fonts: {
       sans: theme.fonts.sans,
       mono: theme.fonts.mono,

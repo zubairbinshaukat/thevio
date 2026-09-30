@@ -11,6 +11,15 @@ describe("parseColor", () => {
     expect(parseColor("  red ")?.h).toBeCloseTo(29.23, 1);
   });
 
+  it("reads hsl() in both syntaxes", () => {
+    expect(formatHex(parseColor("hsl(0 0% 100%)") ?? oklch(0, 0, 0))).toBe(
+      "#ffffff",
+    );
+    expect(
+      formatHex(parseColor("hsla(221.2, 83.2%, 53.3%, 1)") ?? oklch(0, 0, 0)),
+    ).toBe("#2563eb");
+  });
+
   it("keeps alpha and normalises hue", () => {
     const color = parseColor("oklch(0.5 0.1 -30 / 50%)");
     expect(color?.alpha).toBe(0.5);

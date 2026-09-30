@@ -8,6 +8,9 @@
    where they render, so they never grow this sheet. */
 @source not "../features/preview";
 @source not "../features/studio";
+/* core/ renders nothing, but its exporters write class names into DESIGN.md
+   and its import fixtures are whole stylesheets: never utilities here. */
+@source not "../core";
 
 /*
  * Thevio's own chrome. Tokens and rationale: DESIGN.md §3.

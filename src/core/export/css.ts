@@ -4,15 +4,20 @@
 import type { ResolvedTheme } from "../theme/resolve";
 import { RADIUS_SCALE, SHADOW_SIZES } from "../theme/resolve";
 import { COLOR_TOKENS } from "../theme/tokens";
-import { header, modeVars, sharedVars } from "./format";
+import { header, kebab, modeVars, sharedVars } from "./format";
 
 const block = (selector: string, vars: [string, string][]) =>
   `${selector} {\n${vars.map(([name, value]) => `  --${name}: ${value};`).join("\n")}\n}`;
 
 function themeInline(resolved: ResolvedTheme): string {
   const semantic = Object.keys(resolved.semantic.light);
+  // Component colours become utilities too (`bg-tv-soft-bg`), so DESIGN.md's
+  // classes work whether the theme came from this file or the registry.
+  const component = Object.keys(resolved.components.colors.light).map(
+    (name) => `tv-${kebab(name)}`,
+  );
   const lines = [
-    ...[...COLOR_TOKENS, ...semantic].map(
+    ...[...COLOR_TOKENS, ...semantic, ...component].map(
       (token) => `  --color-${token}: var(--${token});`,
     ),
     "  --font-sans: var(--font-sans);",
