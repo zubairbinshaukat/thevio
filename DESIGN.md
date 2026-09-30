@@ -299,7 +299,8 @@ The three presets:
 - **Pins:** editing the brand or the neutrals drops the pinned colours derived from them, so an old contrast fix can't freeze the control.
 - **Fonts:** Google Fonts CSS2 at runtime (`fonts.ts`), from a curated list in `config/fonts.ts`; any other family can be typed. The picker draws each option in its own face from `text=` subsets, renamed (`tvp …`) so a subset never shadows the real font.
 - **Three Tailwind builds on one page.** `globals.css` (every page), `features/studio/studio.css` (the editor's controls) and `preview.css` all emit classes like `.hidden`. `scripts/postcss-scope-utilities.mjs` scopes the two route-level builds to their region (`.tv-preview …`, and the `.tv-studio` root minus the preview), so no build's `hidden` can beat another's `md:block`, whatever the load order. The Studio's popovers portal into its root for this. The shared chrome tokens live in `app/chrome-theme.css`.
-- **Budget:** `/studio` ships 263 KB of its 300 KB JS and 19.4 KB of its 20 KB CSS. zod is imported as a namespace (`import * as z`) so Turbopack can tree-shake it (that alone saved 58 KB).
+- **Export and Import dialogs (M6):** both load on first open (`React.lazy`, prefetched on hover/focus), because they pull in every exporter and the importer. fflate and SnapDOM load inside the ZIP/PNG handlers (`save.ts`). The PNG embeds the theme's Google Fonts (verified by `e2e/studio.spec.ts`). Import runs the same `importTheme` + `validateAndFix` as `POST /api/theme` and applies as one undo step.
+- **Budget:** `/studio` ships 272 KB of its 300 KB JS and 19.6 KB of its 20 KB CSS. The lazy dialogs' chunk boundaries cost ~8 KB of initial JS in Turbopack's chunking, though none of their code loads up front. zod is imported as a namespace (`import * as z`) so Turbopack can tree-shake it (that alone saved 58 KB).
 
 ## 9. Verification checklist
 

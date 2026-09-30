@@ -5,6 +5,7 @@ import {
   type CSSProperties,
   createContext,
   type ReactNode,
+  type Ref,
   use,
   useState,
 } from "react";
@@ -29,6 +30,8 @@ type ThemeScopeProps = {
   scope: ScopeStyle;
   className?: string;
   children: ReactNode;
+  /** The scope element, e.g. for a PNG capture of the preview. */
+  ref?: Ref<HTMLDivElement>;
 };
 
 /**
@@ -36,7 +39,12 @@ type ThemeScopeProps = {
  * component tokens as data attributes (`data-button-style="soft"`, …), which
  * preview.css reads. Never nest scopes: token selectors match any ancestor.
  */
-export function ThemeScope({ scope, className, children }: ThemeScopeProps) {
+export function ThemeScope({
+  scope,
+  className,
+  children,
+  ref,
+}: ThemeScopeProps) {
   const nested = use(InScope);
   const [portal, setPortal] = useState<HTMLElement | null>(null);
   if (nested && process.env.NODE_ENV !== "production") {
@@ -48,6 +56,7 @@ export function ThemeScope({ scope, className, children }: ThemeScopeProps) {
       <PortalRoot value={portal}>
         <Tooltip.Provider delayDuration={250}>
           <div
+            ref={ref}
             {...scope.attributes}
             style={scope.vars as CSSProperties}
             className={cx("tv-preview", className)}

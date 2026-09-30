@@ -43,7 +43,7 @@ yarn-error.log*
 # scaffold temp folder
 _scaffold/
 
-# playwright (later phase)
+# playwright
 playwright-report/
 test-results/
 

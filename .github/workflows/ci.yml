@@ -28,3 +28,6 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm perf:budget
+      # E2E runs against the build perf:budget just made.
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e

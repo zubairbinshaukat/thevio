@@ -4,7 +4,7 @@
 // preview first, on small screens). Rendered on the client only, inside a
 // Suspense boundary, because it reads the theme from the URL.
 
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { preconnect } from "react-dom";
 import { MoonIcon, SunIcon } from "@/components/icons";
 import { toScope } from "@/core/export/scope";
@@ -19,6 +19,8 @@ import { Segmented, StudioRoot, ToolButton } from "./controls";
 import { sameTheme } from "./edits";
 import {
   AlertIcon,
+  DownloadIcon,
+  ImportIcon,
   MonitorIcon,
   PhoneIcon,
   RedoIcon,
@@ -28,6 +30,7 @@ import {
   XIcon,
 } from "./icons";
 import { Panel } from "./panel";
+import { prefetchSavers } from "./save";
 import { copyText, SharePopover } from "./share";
 import { isTyping, shortcutFor } from "./shortcuts";
 import { shareUrl } from "./url";
@@ -48,6 +51,13 @@ const VIEWPORTS = [
   },
 ] as const;
 type Viewport = (typeof VIEWPORTS)[number]["id"];
+
+// Both pull in large parts of core (every exporter; the importer), so they
+// load on first open; hover or focus on their buttons starts the download.
+const loadExport = () => import("./export-dialog");
+const loadImport = () => import("./import-dialog");
+const ExportDialog = lazy(loadExport);
+const ImportDialog = lazy(loadImport);
 
 const FRAME_WIDTH: Record<Viewport, string> = {
   desktop: "100%",
@@ -72,6 +82,8 @@ export function Studio() {
   const [root, setRoot] = useState<HTMLElement | null>(null);
   const [viewport, setViewport] = useState<Viewport>("desktop");
   const [notice, setNotice] = useState<string | null>(null);
+  const [preview, setPreview] = useState<HTMLDivElement | null>(null);
+  const [dialog, setDialog] = useState<"export" | "import" | null>(null);
 
   // Google Fonts: warm both origins before the first family is requested.
   preconnect("https://fonts.googleapis.com");
@@ -189,9 +201,51 @@ export function Studio() {
               >
                 <ResetIcon />
               </ToolButton>
+              <ToolButton
+                aria-label="Import a theme"
+                title="Import a theme (globals.css, tweakcn, shadcn registry, Thevio)"
+                onPointerEnter={() => void loadImport()}
+                onFocus={() => void loadImport()}
+                onClick={() => setDialog("import")}
+              >
+                <ImportIcon />
+              </ToolButton>
+              <ToolButton
+                title="Export: CSS, Tailwind, DTCG, Figma, DESIGN.md, ZIP, PNG"
+                onPointerEnter={() => {
+                  void loadExport();
+                  prefetchSavers();
+                }}
+                onFocus={() => void loadExport()}
+                onClick={() => setDialog("export")}
+              >
+                <DownloadIcon />
+                Export
+              </ToolButton>
               {link && <SharePopover url={link} />}
             </div>
           </div>
+
+          <Suspense fallback={null}>
+            {dialog === "export" && (
+              <ExportDialog
+                resolved={resolved}
+                preview={preview}
+                open
+                onOpenChange={(open) => !open && setDialog(null)}
+              />
+            )}
+            {dialog === "import" && (
+              <ImportDialog
+                open
+                onOpenChange={(open) => !open && setDialog(null)}
+                onApply={(next) => {
+                  edit(() => next);
+                  setNotice("Theme imported. Undo restores the previous one.");
+                }}
+              />
+            )}
+          </Suspense>
 
           {studio.brokenLink && (
             <div
@@ -220,6 +274,7 @@ export function Studio() {
               style={{ width: FRAME_WIDTH[viewport] }}
             >
               <ThemeScope
+                ref={setPreview}
                 scope={scope}
                 className="min-h-0 flex-1 overflow-hidden rounded-xl shadow-lg ring-1 ring-edge"
               >
