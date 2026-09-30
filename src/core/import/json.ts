@@ -30,7 +30,7 @@ const text = (value: unknown) =>
 
 /** A registry slug (`modern-minimal`) as a title (`Modern Minimal`). */
 const titleCase = (slug: string) =>
-  /^[a-z0-9]+(?:-[a-z0-9]+)+$/.test(slug)
+  /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)
     ? slug.replace(
         /(^|-)([a-z0-9])/g,
         (_, dash: string, ch: string) =>

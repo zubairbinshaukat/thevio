@@ -61,7 +61,11 @@ export type RegistryItem = {
   meta: Record<string, string>;
 };
 
-export function toRegistryItem(resolved: ResolvedTheme): RegistryItem {
+export function toRegistryItem(
+  resolved: ResolvedTheme,
+  /** The item name; defaults to the theme name as a slug. */
+  name = slug(resolved.theme.name),
+): RegistryItem {
   const { fonts } = resolved;
   const theme: Record<string, string> = {
     "font-sans": fontStack(fonts.sans, "sans"),
@@ -104,7 +108,7 @@ export function toRegistryItem(resolved: ResolvedTheme): RegistryItem {
 
   return {
     $schema: REGISTRY_ITEM_SCHEMA,
-    name: slug(resolved.theme.name),
+    name,
     type: "registry:theme",
     title: resolved.theme.name,
     description: `A Thevio theme. ${REGISTRY_NOTE}`,
