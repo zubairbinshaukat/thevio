@@ -1,0 +1,156 @@
+/*
+ * The chrome's Tailwind theme: token mappings, the dark variant and shared
+ * utilities. Imported by globals.css and by the Studio's own build
+ * (features/studio/studio.css), so both generate the same utilities from the
+ * same tokens. Values live in globals.css (:root / .dark).
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sunken: var(--sunken);
+  --color-edge: var(--edge);
+  --color-brand: var(--brand);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Radii nest: inner = outer − padding (32 ⊃ 24 ⊃ 16 ⊃ 12 ⊃ 8). */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.5rem;
+
+  /*
+   * Soft shadow scale: 2–3 layers, straight down, tinted with --hue, never
+   * black. Inline, so var(--hue) resolves on each element and a subtree can
+   * re-tint its own shadows. Dark mode deepens the tint (--shadow-k).
+   */
+  --shadow-xs:
+    0 1px 2px 0
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.06 * var(--shadow-k))
+    ),
+    0 1px 1px 0
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.04 * var(--shadow-k))
+    );
+  --shadow-sm:
+    0 1px 2px 0
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.05 * var(--shadow-k))
+    ),
+    0 2px 6px -1px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.06 * var(--shadow-k))
+    );
+  --shadow-md:
+    0 2px 4px -1px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.05 * var(--shadow-k))
+    ),
+    0 8px 16px -4px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.07 * var(--shadow-k))
+    );
+  --shadow-lg:
+    0 2px 4px -1px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.04 * var(--shadow-k))
+    ),
+    0 12px 24px -6px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.07 * var(--shadow-k))
+    ),
+    0 24px 40px -12px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.06 * var(--shadow-k))
+    );
+  --shadow-xl:
+    0 4px 8px -2px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.04 * var(--shadow-k))
+    ),
+    0 20px 40px -10px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.08 * var(--shadow-k))
+    ),
+    0 40px 72px -20px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.08 * var(--shadow-k))
+    );
+  --shadow-2xl:
+    0 6px 12px -4px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.05 * var(--shadow-k))
+    ),
+    0 32px 64px -16px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.1 * var(--shadow-k))
+    ),
+    0 64px 120px -32px
+    oklch(
+      var(--shadow-l) var(--shadow-c) var(--hue) /
+      calc(0.1 * var(--shadow-k))
+    );
+  /* The 1px top highlight every raised surface gets (see `surface`). */
+  --inset-shadow-edge: inset 0 1px 0 0 var(--edge-hl);
+
+  --ease-soft: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A raised surface: card fill, hairline ring, top highlight. Add a shadow-*. */
+@utility surface {
+  @apply bg-card text-card-foreground ring-1 ring-edge inset-shadow-edge;
+}

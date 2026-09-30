@@ -9,7 +9,7 @@
 // "#hex" default is converted like user input). zod 4's `.default()` would
 // return it untouched.
 
-import { z } from "zod";
+import * as z from "zod";
 import { type Oklch, oklch, parseColor } from "../color/convert";
 import { COLOR_TOKENS } from "./tokens";
 

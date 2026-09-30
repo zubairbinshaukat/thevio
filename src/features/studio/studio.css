@@ -1,0 +1,66 @@
+/*
+ * The Studio's controls: a separate Tailwind build scanning only this folder,
+ * imported by studio.tsx, so the marketing pages never carry the editor's
+ * classes. Same tokens as the rest of the chrome (app/chrome-theme.css);
+ * their values come from globals.css, which every page loads.
+ */
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "../../app/chrome-theme.css";
+@source "./";
+/* Studio sliders: a native range with a styleable track (set --track). */
+@utility range {
+  --track: var(--sunken);
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 1.25rem;
+  background: transparent;
+  cursor: pointer;
+  &::-webkit-slider-runnable-track {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--track);
+    box-shadow: inset 0 0 0 1px var(--edge);
+  }
+  &::-moz-range-track {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--track);
+    box-shadow: inset 0 0 0 1px var(--edge);
+  }
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    margin-top: -0.25rem;
+    border-radius: 9999px;
+    background: oklch(1 0 0);
+    box-shadow:
+      0 0 0 1px oklch(0 0 0 / 0.22),
+      0 1px 3px oklch(0 0 0 / 0.25);
+  }
+  &::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    border-radius: 9999px;
+    background: oklch(1 0 0);
+    box-shadow:
+      0 0 0 1px oklch(0 0 0 / 0.22),
+      0 1px 3px oklch(0 0 0 / 0.25);
+  }
+  &:focus-visible {
+    outline: none;
+  }
+  &:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  &:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}

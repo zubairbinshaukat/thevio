@@ -262,7 +262,7 @@ What Thevio does:
   - Overlays portal into a node inside the root, so dialogs, menus, selects and tooltips keep the theme. `contain: layout` makes a dialog cover only its preview.
   - Scopes can't nest, because token selectors match any ancestor.
 - **`data-mode`, not `.dark`** (amends plan §D.2). The chrome's `.dark` would pull the site's own variables into the preview. Preview components never use `dark:`; every mode difference is a variable.
-- **Its own stylesheet** (`preview.css`): a second Tailwind build that scans only `src/features/preview/`, imported by `ThemeScope`. It loads only where previews render, so it never grows the site's global CSS; `globals.css` excludes that folder.
+- **Its own stylesheet** (`preview.css`): a second Tailwind build that scans only `src/features/preview/`, imported by `ThemeScope`. It loads only where previews render, so it never grows the site's global CSS; `globals.css` excludes that folder. Its utilities are scoped to `.tv-preview` at build time (see §10).
   - Theme radius and shadow utilities are removed from that build, so preview code can't collide with the chrome's `rounded-lg`/`shadow-md`. Use `rounded-(--radius)` and the like instead.
   - Each style is one `@utility` with `:where([data-…] *)` branches: `tv-surface`, `tv-overlay`, `tv-focus`, `tv-btn-primary`, `tv-field`, `tv-tabs`, `tv-tab`.
 - **Contrast is guaranteed, not hoped for.** Colours a style derives are computed in core (`resolve.ts`, using `mixOklch`, which matches CSS `color-mix(in oklch)`) and solved to their WCAG 2 targets:
@@ -288,7 +288,18 @@ The three presets:
 | Focus | ring + halo | glow | offset outline |
 | Tabs | segmented | pill | underline |
 
-**Where to see it:** `/studio` shows all four sample themes × three presets × both modes side by side (the acceptance check), until the editor replaces it. Radix and the preview components cost `/studio` ~52 KB gzip of JS (now 189 KB of its 300 KB budget).
+**Where to see it:** the `/studio` editor. The M3 side-by-side check (four sample themes × three presets × both modes) now runs as a test (`features/studio/contrast.test.ts`).
+
+## 10. Studio editor (first slice, 2026-09-30)
+
+`/studio` is the editor: controls on the left, a live preview on the right (stacked, preview first, below `lg`).
+
+- **Scope of this slice:** brand colour (OKLCH picker), neutral tint, fonts (body, headings, code), radius, style preset + the seven tokens, contrast summary with "Fix all", undo/redo, share link. Preview pages: landing, dashboard, sign-in, settings, at desktop, 768px or 390px, light or dark.
+- **State:** an in-memory history (`history.ts`) is the source of truth; the URL mirrors it (`?t=` theme, `?p=` page, history `replace`, throttled to 300ms). The URL is read once, on load. A drag or a burst of typing on one control is one undo step.
+- **Pins:** editing the brand or the neutrals drops the pinned colours derived from them, so an old contrast fix can't freeze the control.
+- **Fonts:** Google Fonts CSS2 at runtime (`fonts.ts`), from a curated list in `config/fonts.ts`; any other family can be typed. The picker draws each option in its own face from `text=` subsets, renamed (`tvp …`) so a subset never shadows the real font.
+- **Three Tailwind builds on one page.** `globals.css` (every page), `features/studio/studio.css` (the editor's controls) and `preview.css` all emit classes like `.hidden`. `scripts/postcss-scope-utilities.mjs` scopes the two route-level builds to their region (`.tv-preview …`, and the `.tv-studio` root minus the preview), so no build's `hidden` can beat another's `md:block`, whatever the load order. The Studio's popovers portal into its root for this. The shared chrome tokens live in `app/chrome-theme.css`.
+- **Budget:** `/studio` ships 263 KB of its 300 KB JS and 19.4 KB of its 20 KB CSS. zod is imported as a namespace (`import * as z`) so Turbopack can tree-shake it (that alone saved 58 KB).
 
 ## 9. Verification checklist
 

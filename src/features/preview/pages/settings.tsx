@@ -1,15 +1,16 @@
 "use client";
 
-// The fixed page used to judge style presets (plan §D.4): the same markup
-// must read as three different products under shadcn, Soft and Crisp.
-// Every preview component appears at least once.
+// Workspace settings: the page used to judge style presets (plan §D.4), so
+// every preview component appears at least once. The same markup must read
+// as three different products under shadcn, Soft and Crisp.
 
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Checkbox, RadioGroup, RadioItem, Switch } from "./ui/choice";
-import { Avatar, Progress, Separator, Table, Td, Th } from "./ui/data";
-import { Input, Label, Textarea } from "./ui/field";
+import { useId } from "react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Checkbox, RadioGroup, RadioItem, Switch } from "../ui/choice";
+import { Avatar, Progress, Separator, Table, Td, Th } from "../ui/data";
+import { Input, Label, Textarea } from "../ui/field";
 import {
   Dialog,
   DialogClose,
@@ -25,15 +26,15 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "./ui/overlay";
+} from "../ui/overlay";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+} from "../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 const MEMBERS = [
   { name: "Ayesha Khan", initials: "AK", role: "Owner", tone: "primary" },
@@ -41,11 +42,11 @@ const MEMBERS = [
   { name: "Sara Malik", initials: "SM", role: "Invited", tone: "warning" },
 ] as const;
 
-/** `id` keeps form ids unique when several copies share a page. */
-export function SamplePage({ id }: { id: string }) {
+export function SettingsPage() {
+  const id = useId();
   const field = (name: string) => `${id}-${name}`;
   return (
-    <div className="flex flex-col gap-(--tv-gap) p-[calc(var(--tv-card-pad)*0.75)]">
+    <div className="mx-auto flex max-w-xl flex-col gap-(--tv-gap) p-[calc(var(--tv-card-pad)*0.75)]">
       <header className="flex items-center gap-3">
         <Avatar initials="AL" />
         <div className="min-w-0 flex-1">

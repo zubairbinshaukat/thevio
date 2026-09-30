@@ -23,6 +23,8 @@ Runtime libs for later phases: zod, nuqs, lz-string, culori, recharts, motion, f
 
 - **Marketing client code** uses `cx` (`src/lib/cx.ts`) instead of `cn`, and `src/components/icons.tsx` instead of lucide-react: both keep `/` inside its JS budget (see DESIGN.md §6). The preloader lives in `src/features/preloader/`; its scripts are inlined with `.toString()`, so they must stay self-contained.
 - **Preview components** (`src/features/preview/`) have their own Tailwind build (`preview.css`) and are styled only by theme variables and `data-*` tokens from `ThemeScope`. No `dark:` there, and no chrome utilities; chrome-styled UI goes in `features/studio/` (see DESIGN.md §8).
+- **Studio controls** (`src/features/studio/`) have their own build too (`studio.css`, sharing `app/chrome-theme.css` with `globals.css`). Both route builds are scoped to their region by `scripts/postcss-scope-utilities.mjs`, so render Studio UI inside the `.tv-studio` root and portal its popovers there (`useStudioRoot()`). In preview components, hide with a variant (`@max-md:hidden`), not plain `hidden`, on elements that already set a display (DESIGN.md §10).
+- Import zod as `import * as z from "zod"`: the named `{ z }` import defeats tree-shaking and costs the Studio ~58 KB.
 - **fflate and SnapDOM load only on Export click** (`import()` inside the handler, prefetched on hover). Never import them statically: `perf:budget` fails if their code reaches any route's initial JS.
 
 ## Folder rules

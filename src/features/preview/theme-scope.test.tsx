@@ -4,7 +4,7 @@ import { toScope } from "@/core/export/scope";
 import { DEFAULT_THEME } from "@/core/theme/defaults";
 import { resolveTheme } from "@/core/theme/resolve";
 import { STYLE_PRESETS } from "@/core/theme/style-presets";
-import { SamplePage } from "./sample-page";
+import { SettingsPage } from "./pages/settings";
 import { ThemeScope } from "./theme-scope";
 import { Button } from "./ui/button";
 import {
@@ -68,11 +68,11 @@ describe("ThemeScope", () => {
   });
 
   it.each(Object.keys(STYLE_PRESETS) as (keyof typeof STYLE_PRESETS)[])(
-    "renders the sample page under %s",
+    "renders the settings page under %s",
     (preset) => {
       render(
         <ThemeScope scope={scope(preset, "light")}>
-          <SamplePage id={preset} />
+          <SettingsPage />
         </ThemeScope>,
       );
       expect(screen.getByRole("tablist", { name: "Settings" })).toBeVisible();
